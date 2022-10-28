@@ -5,7 +5,7 @@ $comment="";
 if(isset($_POST['submit'])){
 
     $check = mysqli_query($conn, "SELECT * FROM users WHERE email = '{$_POST['email']}'");
-    if($_POST['firstname']=="" || $_POST['lastname']=="" || $_POST['age']=="" || $_POST['height']=="" || $_POST['email']=="" || $_POST['number']=="" || $_POST['password']=="" || $_POST['confirm']=="" || $_POST['profile']==""){
+    if($_POST['firstname']=="" || $_POST['lastname']=="" || $_POST['age']=="" || $_POST['height']=="" || $_POST['email']=="" || $_POST['number']=="" || $_POST['password']=="" || $_POST['confirm']==""){
         $comment= "all fields must be filled";
     }
     elseif(mysqli_num_rows($check) > 0){
@@ -14,7 +14,7 @@ if(isset($_POST['submit'])){
     elseif($_POST['password']!=$_POST['confirm']){
         $comment = "reconfirm your password";
     }
-    elseif(strlen($_POST['number']) < 12){
+    elseif(strlen($_POST['number']) < 11){
         $comment = "your number is too short";
     }
     else{
@@ -29,6 +29,8 @@ if(isset($_POST['submit'])){
     $confirm = $_POST['confirm'];
     $profile = $_POST['profile'];
     $insert = mysqli_query($conn, "INSERT INTO users(fname, lname, age, gender, height, email, number, password, profile) VALUES('$firstname', '$lastname', '$age', '$gender', '$height', '$email', '$number', '$password', '$profile')");
+    header('location:login.php');
+
     if($insert){
         $comment = "submitted";
     }
@@ -47,7 +49,7 @@ if(isset($_POST['submit'])){
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <form method="post" enctype="multipart/form-data" action="login.php">
+    <form method="post" enctype="multipart/form-data">
         <input type="text" name="firstname" placeholder="enter your first name">
         <br><br>
         <input type="text" name="lastname" placeholder="enter your last name">
@@ -72,10 +74,9 @@ if(isset($_POST['submit'])){
         <input type="password" name="confirm" placeholder="confirm your password">
         <br><br>
         <input type="file" name="profile">
-        <input class="psub" type="submit" name="profilesub" value="uplaod">
         <br>
         <button name="submit">SUBMIT</button>
-        <div style="color:black; font-weight:bold">
+        <div style="color:red; font-weight:bold; text-transform:uppercase">
             <?php
                 echo $comment;
             ?>
